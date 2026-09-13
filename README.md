@@ -28,6 +28,10 @@ Licensed under **MIT OR Apache-2.0**. The submodules carry their own licences.
 panels without the network half, no account, no submodules. This build installs alongside
 it rather than replacing it, so you can keep both and decide per task.
 
+**[Ice Commander Full](https://github.com/ice-commander/app-full)** goes the other way: a
+fork of this one that keeps everything here and adds more on top. If you want the maximal
+build rather than the peer-to-peer one, that is where the larger features land.
+
 ---
 
 ## Features
