@@ -171,6 +171,10 @@ impl fm_core::rpc::FileSystemRpc for RemoteFileSystemRpc {
     fn as_any(&self) -> Option<&dyn std::any::Any> {
         Some(self)
     }
+    fn supports_offset_io(&self) -> bool {
+        false
+    }
+
     fn supports_terminal(&self) -> bool {
         peer_terminal(&self.peer_id).is_some()
     }
@@ -460,6 +464,7 @@ impl fm_core::rpc::FileSystemRpc for RemoteFileSystemRpc {
                                 size: 0,
                                 modified: parse_date_str(&d.1),
                                 permissions,
+                                extra: Vec::new(),
                             });
                         }
                     } else {
@@ -473,6 +478,7 @@ impl fm_core::rpc::FileSystemRpc for RemoteFileSystemRpc {
                                 size: 0,
                                 modified: 0,
                                 permissions,
+                                extra: Vec::new(),
                             });
                         }
                     }
@@ -488,6 +494,7 @@ impl fm_core::rpc::FileSystemRpc for RemoteFileSystemRpc {
                                 size: f.1,
                                 modified: parse_date_str(&f.2),
                                 permissions,
+                                extra: Vec::new(),
                             });
                         }
                     } else {
@@ -501,6 +508,7 @@ impl fm_core::rpc::FileSystemRpc for RemoteFileSystemRpc {
                                 size: f.1,
                                 modified: 0,
                                 permissions,
+                                extra: Vec::new(),
                             });
                         }
                     }
