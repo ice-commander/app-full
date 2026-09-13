@@ -30,6 +30,7 @@ fn list_dir(parts: &[String]) -> Vec<RemoteFileEntry> {
                 size: meta.len(),
                 modified,
                 permissions,
+                extra: Vec::new(),
             });
         }
     }
@@ -71,6 +72,7 @@ impl LocalFm {
                 can_mount: false,
                 is_mounted: false,
                 mount_name: String::new(),
+                extra_columns: Vec::new(),
             },
             select_name: None,
         });
