@@ -253,6 +253,11 @@ impl RouterState {
             if crate::nav::is_archive(name) {
                 let archive = Rc::new(ArchiveFileSystemRpc::new(child_rel, parent_fs));
                 path.push(PathLevel::new(name, "/", archive));
+            } else if crate::nav::is_torrent(name) {
+                let torrent = Rc::new(
+                    virtualfs::torrent_rpc::TorrentFileSystemRpc::new(child_rel, parent_fs),
+                );
+                path.push(PathLevel::new(name, "/", torrent));
             } else {
                 path.push(PathLevel::new(name, child_rel, parent_fs));
             }

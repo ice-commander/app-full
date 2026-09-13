@@ -383,4 +383,16 @@ mod tests {
             assert_eq!(entered, build_segments_to_path(&segments(&all)), "{parent:?} + {child:?}");
         }
     }
+    #[test]
+    fn a_torrent_file_is_recognised_whatever_its_case() {
+        use crate::nav::{is_archive, is_torrent};
+        assert!(is_torrent("ubuntu.torrent"));
+        assert!(is_torrent("Ubuntu.TORRENT"));
+        assert!(!is_torrent("ubuntu.torrent.part"));
+        assert!(!is_torrent("torrent"));
+        assert!(!is_torrent("notes.txt"));
+        assert!(!is_archive("ubuntu.torrent"));
+        assert!(!is_torrent("data.zip"));
+    }
+
 }

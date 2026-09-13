@@ -10,6 +10,7 @@ publish = false
 # mounts. One home the GTK app, panel-router and the headless backend all draw
 # from. Still depends on gtk_fm_ui for now; the GTK-free split lands with headless.
 [dependencies]
+librqbit = { version = "8.1.0", default-features = false, features = ["default-tls", "disable-upload"] }
 gtk = { package = "gtk4", version = "0.9", features = ["v4_12"], optional = true }
 adw = { package = "libadwaita", version = "0.7", features = ["v1_6"], optional = true }
 common = { workspace = true }
@@ -35,6 +36,7 @@ ssh2 = { version = "0.9.5", features = ["vendored-openssl"] }
 suppaftp = "8.0.2"
 reqwest = { version = "0.11", default-features = false, features = ["rustls-tls", "stream"] }
 serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
 futures-util = "0.3"
 bytes = { workspace = true }
 
@@ -49,3 +51,6 @@ default = ["gtk"]
 # providers expose only the GTK-free `fm_core` data trait (headless).
 gtk = ["dep:gtk", "dep:adw", "dep:gtk-fm-ui"]
 nodeinnet = ["dep:client-core", "dep:web-davserver", "dep:nodeinnet-p2p", "fm-core/nodeinnet"]
+
+[dev-dependencies]
+tempfile = "3"

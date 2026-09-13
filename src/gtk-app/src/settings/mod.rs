@@ -23,6 +23,7 @@ mod page_logging;
 #[cfg(feature = "nodeinnet")]
 mod page_nodeinnet;
 mod page_security;
+mod page_torrents;
 #[cfg(feature = "nodeinnet")]
 mod page_transfer;
 
@@ -108,6 +109,10 @@ pub fn show_settings_dialog(
     categories.push((
         "Toolbar",
         crate::i18n::tr("settings.cat_toolbar"),
+    ));
+    categories.push((
+        "Torrents",
+        crate::i18n::tr("settings.cat_torrents"),
     ));
     categories.push((
         "Hot keys",
@@ -201,6 +206,13 @@ pub fn show_settings_dialog(
                 let on_changed = on_connections_changed.clone();
                 Some(std::boxed::Box::new(move |page_box: &Box| {
                     page_toolbar::build(page_box, config.clone(), on_changed.clone());
+                }))
+            }
+            "Torrents" => {
+                let config = config.clone();
+                let on_changed = on_connections_changed.clone();
+                Some(std::boxed::Box::new(move |page_box: &Box| {
+                    page_torrents::build(page_box, config.clone(), on_changed.clone());
                 }))
             }
             "Hot keys" => {

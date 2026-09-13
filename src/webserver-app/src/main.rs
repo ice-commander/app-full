@@ -704,6 +704,11 @@ async fn main() {
         .and_then(|s| s.parse().ok())
         .unwrap_or(8090);
     let config = client_config::AppConfig::new("ice-commander");
+    virtualfs::torrent_session::set_seeding_enabled(
+        config
+            .get::<bool>(virtualfs::torrent_session::SEEDING_KEY)
+            .unwrap_or(true),
+    );
     secret_store::harden_file_permissions(&config.config_path());
 
     let make_core = || {

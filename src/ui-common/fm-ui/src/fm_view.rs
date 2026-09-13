@@ -2197,7 +2197,8 @@ fn handle_activate(
         || lower.ends_with(".tar.bz2")
         || lower.ends_with(".tbz2")
         || lower.ends_with(".tbz");
-    if entry.is_dir() || is_archive {
+    let is_torrent = lower.ends_with(".torrent");
+    if entry.is_dir() || is_archive || is_torrent {
         let _ = sender.output(FmPanelOutput::NavigateEnter(entry.name()));
     } else {
         let mut target = shared.current_path.borrow().clone();

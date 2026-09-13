@@ -5,6 +5,8 @@ pub mod fs_sftp;
 pub mod fs_webdav;
 
 pub mod archive_rpc;
+pub mod torrent_rpc;
+pub mod torrent_session;
 pub mod dialogs;
 pub mod drives_root_rpc;
 pub mod ftp_rpc;

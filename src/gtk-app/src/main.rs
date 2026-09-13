@@ -33,6 +33,7 @@ mod panel_builder;
 mod player;
 mod player_ui;
 mod process_panel;
+mod torrent_toolbar;
 mod registry_panel;
 mod secret_store;
 mod settings;
@@ -76,6 +77,11 @@ async fn main() -> glib::ExitCode {
 
     let config = client_config::AppConfig::new("ice-commander");
     secret_store::harden_file_permissions(&config.config_path());
+    virtualfs::torrent_session::set_seeding_enabled(
+        config
+            .get::<bool>(virtualfs::torrent_session::SEEDING_KEY)
+            .unwrap_or(true),
+    );
     let language = config.get::<String>("ui.language").unwrap_or_else(|| "en".to_string());
     i18n::register();
     i18n::set_lang(&language);

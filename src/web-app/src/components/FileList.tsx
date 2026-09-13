@@ -3,6 +3,7 @@ import { tr } from "../lib/i18n";
 import type { FileEntry } from '../api/types'
 import { formatSize } from '../lib/format'
 import { isArchive } from '../lib/archive'
+import { isTorrent } from '../lib/torrent'
 import { generatedFileIcon } from '../lib/fileIcon'
 import folderIcon from '../assets/folder.svg'
 import fileIcon from '../assets/file.svg'
@@ -51,7 +52,7 @@ export function FileList({ entries, viewMode, selectedNames, showUp, onSelect, o
   const open = (row: Row) => {
     if (row.isUp) onUp()
     // archives are files on disk but the router enters them as folders (virtual paths)
-    else if (row.is_dir || isArchive(row.name)) onOpenDir(row.name)
+    else if (row.is_dir || isArchive(row.name) || isTorrent(row.name)) onOpenDir(row.name)
     else onOpenFile(entries.find((e) => e.name === row.name)!)
   }
 

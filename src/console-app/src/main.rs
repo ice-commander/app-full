@@ -70,6 +70,11 @@ pub(crate) fn goto_local(core: &RouterState, path: &str) {
 
 async fn run() -> io::Result<()> {
     let config = client_config::AppConfig::new("ice-commander");
+    virtualfs::torrent_session::set_seeding_enabled(
+        config
+            .get::<bool>(virtualfs::torrent_session::SEEDING_KEY)
+            .unwrap_or(true),
+    );
     secret_store::harden_file_permissions(&config.config_path());
 
     let make_core = || {

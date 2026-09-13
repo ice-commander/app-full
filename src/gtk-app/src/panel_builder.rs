@@ -50,6 +50,7 @@ struct TabInfo {
     show_hidden_btn: gtk::Button,
     player_view: crate::player_ui::AudioPlayerView,
     term_btn: gtk::Button,
+    torrent_bar: crate::torrent_toolbar::TorrentToolbar,
     header_hide_widgets: Vec<gtk::Widget>,
     open_terminal: std::rc::Rc<dyn Fn()>,
     toggle_terminal: std::rc::Rc<dyn Fn()>,
@@ -403,6 +404,13 @@ impl PanelInfo {
     pub fn refresh_terminal_button(&self) {
         let supported = self.active_router().state.active_provider().supports_terminal();
         self.active_term_btn().set_sensitive(supported);
+        self.refresh_torrent_toolbar();
+    }
+
+    pub fn refresh_torrent_toolbar(&self) {
+        let router = self.active_router();
+        let bar = self.with_active(|t| t.torrent_bar.clone());
+        bar.refresh(&router);
     }
 
     pub fn active_term_btn(&self) -> gtk::Button {
@@ -1049,12 +1057,15 @@ fn build_tab(
         stack.set_visible_child_name("selector");
     }
 
+    let torrent_bar = crate::torrent_toolbar::build(router.clone());
     let content = Box::builder().orientation(Orientation::Vertical).build();
+    content.append(&torrent_bar.container);
     content.append(&paned);
 
     TabInfo {
         id: 0,
         content,
+        torrent_bar,
         tab_header,
         tab_switch,
         router,

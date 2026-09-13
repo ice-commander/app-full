@@ -89,6 +89,10 @@ impl NavPath {
     }
 }
 
+pub fn is_torrent(name: &str) -> bool {
+    name.to_lowercase().ends_with(".torrent")
+}
+
 pub fn is_archive(name: &str) -> bool {
     let n = name.to_lowercase();
     n.ends_with(".zip")
@@ -111,6 +115,15 @@ pub fn build_levels(target: &[crate::PathSegment], base: Rc<dyn FileSystemRpc>) 
         if is_archive(name) {
             let relative_in_parent = crate::build_segments_to_path(&target[fs_start..=i]);
             let provider = Rc::new(virtualfs::archive_rpc::ArchiveFileSystemRpc::new(
+                relative_in_parent,
+                current_fs.clone(),
+            ));
+            current_fs = provider;
+            fs_start = i + 1;
+            levels.push(PathLevel::new(name.clone(), "/", current_fs.clone()));
+        } else if is_torrent(name) {
+            let relative_in_parent = crate::build_segments_to_path(&target[fs_start..=i]);
+            let provider = Rc::new(virtualfs::torrent_rpc::TorrentFileSystemRpc::new(
                 relative_in_parent,
                 current_fs.clone(),
             ));

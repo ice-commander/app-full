@@ -40,7 +40,10 @@ impl App {
         let Some(row) = self.panes[self.active].selected_row() else { return };
         if row.is_parent {
             self.go_up().await;
-        } else if row.is_dir || panel_core::nav::is_archive(&row.name) {
+        } else if row.is_dir
+            || panel_core::nav::is_archive(&row.name)
+            || panel_core::nav::is_torrent(&row.name)
+        {
             let core = self.panes[self.active].core.clone();
             let _ = core.enter(&row.name).await;
             self.active_pane().table.select(Some(0));
