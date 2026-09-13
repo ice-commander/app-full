@@ -171,6 +171,10 @@ impl fm_core::rpc::FileSystemRpc for RemoteFileSystemRpc {
     fn as_any(&self) -> Option<&dyn std::any::Any> {
         Some(self)
     }
+    fn supports_offset_io(&self) -> bool {
+        false
+    }
+
     fn supports_terminal(&self) -> bool {
         peer_terminal(&self.peer_id).is_some()
     }
