@@ -464,6 +464,7 @@ impl fm_core::rpc::FileSystemRpc for RemoteFileSystemRpc {
                                 size: 0,
                                 modified: parse_date_str(&d.1),
                                 permissions,
+                                extra: Vec::new(),
                             });
                         }
                     } else {
@@ -477,6 +478,7 @@ impl fm_core::rpc::FileSystemRpc for RemoteFileSystemRpc {
                                 size: 0,
                                 modified: 0,
                                 permissions,
+                                extra: Vec::new(),
                             });
                         }
                     }
@@ -492,6 +494,7 @@ impl fm_core::rpc::FileSystemRpc for RemoteFileSystemRpc {
                                 size: f.1,
                                 modified: parse_date_str(&f.2),
                                 permissions,
+                                extra: Vec::new(),
                             });
                         }
                     } else {
@@ -505,6 +508,7 @@ impl fm_core::rpc::FileSystemRpc for RemoteFileSystemRpc {
                                 size: f.1,
                                 modified: 0,
                                 permissions,
+                                extra: Vec::new(),
                             });
                         }
                     }
