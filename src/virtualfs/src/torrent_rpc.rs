@@ -54,6 +54,17 @@ impl TorrentFileSystemRpc {
     }
 }
 
+pub fn status_text(done_bytes: u64, total_bytes: u64) -> String {
+    if total_bytes > 0 && done_bytes >= total_bytes {
+        return crate::i18n::tr("torrent.status_ready");
+    }
+    if done_bytes == 0 {
+        return String::new();
+    }
+    let percent = (done_bytes as f64 / total_bytes as f64 * 100.0).floor() as u64;
+    format!("{}%", percent.min(99))
+}
+
 pub fn downloaded_rows(
     entries: &[TorrentEntry],
     is_complete: &dyn Fn(usize, u64) -> bool,
@@ -67,6 +78,7 @@ pub fn downloaded_rows(
             size: e.size,
             modified: 0,
             permissions: None,
+            extra: Vec::new(),
         })
         .collect();
     rows.sort_by(|a, b| a.name.cmp(&b.name));
@@ -82,6 +94,7 @@ pub fn peer_rows(peers: &[crate::torrent_session::PeerRow]) -> Vec<fm_core::rpc:
             size: p.fetched_bytes,
             modified: 0,
             permissions: None,
+            extra: vec![p.state.clone(), p.pieces.to_string(), p.errors.to_string()],
         })
         .collect()
 }
@@ -168,6 +181,7 @@ pub fn list_level(entries: &[TorrentEntry], internal_dir: &str) -> Vec<fm_core::
             size: 0,
             modified: 0,
             permissions: Some(0o755),
+            extra: Vec::new(),
         })
         .chain(files.into_iter().map(|(name, size)| fm_core::rpc::RemoteFileEntry {
             name,
@@ -175,6 +189,7 @@ pub fn list_level(entries: &[TorrentEntry], internal_dir: &str) -> Vec<fm_core::
             size,
             modified: 0,
             permissions: None,
+            extra: Vec::new(),
         }))
         .collect();
     out.sort_by(|a, b| a.name.cmp(&b.name));
@@ -217,7 +232,27 @@ impl FileSystemRpc for TorrentFileSystemRpc {
         )
         .await?;
         match self.view.get() {
-            TorrentView::All => Ok(list_level(&contents.entries, &path)),
+            TorrentView::All => {
+                let mut rows = list_level(&contents.entries, &path);
+                if let Some(stats) = crate::torrent_session::stats(&self.relative_path_in_parent) {
+                    let dir = normalize_internal_path(&path);
+                    for row in rows.iter_mut() {
+                        if row.is_dir {
+                            continue;
+                        }
+                        let full = if dir.is_empty() {
+                            row.name.clone()
+                        } else {
+                            format!("{}/{}", dir, row.name)
+                        };
+                        if let Some(e) = contents.entries.iter().find(|e| e.path == full) {
+                            let done = stats.file_progress.get(e.id).copied().unwrap_or(0);
+                            row.extra = vec![status_text(done, e.size)];
+                        }
+                    }
+                }
+                Ok(rows)
+            }
             TorrentView::Downloaded => {
                 let key = self.relative_path_in_parent.clone();
                 Ok(downloaded_rows(&contents.entries, &|id, size| {
@@ -296,6 +331,34 @@ impl FileSystemRpc for TorrentFileSystemRpc {
         _progress_callback: Option<Box<dyn Fn(u64) + 'static>>,
     ) -> Result<(), AppError> {
         Err(AppError::Other("Torrent filesystem is read-only".to_string()))
+    }
+
+    fn extra_columns(&self) -> Vec<fm_core::rpc::ColumnSpec> {
+        match self.view.get() {
+            TorrentView::All => vec![fm_core::rpc::ColumnSpec {
+                key: "torrent_status".to_string(),
+                title: crate::i18n::tr("torrent.col_status"),
+                width: Some(110),
+            }],
+            TorrentView::Downloaded => Vec::new(),
+            TorrentView::Peers => vec![
+                fm_core::rpc::ColumnSpec {
+                    key: "peer_state".to_string(),
+                    title: crate::i18n::tr("torrent.col_state"),
+                    width: Some(110),
+                },
+                fm_core::rpc::ColumnSpec {
+                    key: "peer_pieces".to_string(),
+                    title: crate::i18n::tr("torrent.col_pieces"),
+                    width: Some(90),
+                },
+                fm_core::rpc::ColumnSpec {
+                    key: "peer_errors".to_string(),
+                    title: crate::i18n::tr("torrent.col_errors"),
+                    width: Some(90),
+                },
+            ],
+        }
     }
 
     fn is_read_only(&self) -> bool {
@@ -495,6 +558,27 @@ mod tests {
             c.entries[1].id, 2,
             "the padding file at index 1 must keep its slot, or only_files would select the wrong file"
         );
+    }
+
+    #[test]
+    fn a_file_with_nothing_downloaded_shows_no_status() {
+        assert_eq!(status_text(0, 100), "");
+    }
+
+    #[test]
+    fn a_partly_downloaded_file_shows_a_percentage() {
+        assert_eq!(status_text(50, 100), "50%");
+        assert_eq!(status_text(1, 100), "1%");
+    }
+
+    #[test]
+    fn a_percentage_never_reads_as_a_hundred_before_it_is_finished() {
+        assert_eq!(status_text(999, 1000), "99%");
+    }
+
+    #[test]
+    fn an_empty_file_never_looks_partly_downloaded() {
+        assert_eq!(status_text(0, 0), "");
     }
 
 }
