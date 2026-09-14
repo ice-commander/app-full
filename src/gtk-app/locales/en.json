@@ -234,6 +234,8 @@
   "handless.network_warning": "WARNING: Remote access is enabled. The application is accessible from the network",
   "handless.network_warning_address": "Address",
   "handless.network_warning_title": "Network Access Warning",
+  "header.torrent_activity": "Torrent activity",
+  "header.torrent_tooltip": "%{count} torrent(s) open",
   "header.web_access": "Web Access",
   "headless.network_warning": "WARNING: Remote access is enabled. The application is accessible from the network",
   "headless.network_warning_address": "Address",

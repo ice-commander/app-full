@@ -234,6 +234,8 @@
   "handless.network_warning": "UWAGA: Zdalny dostęp jest włączony. Aplikacja jest dostępna z sieci",
   "handless.network_warning_address": "Adres",
   "handless.network_warning_title": "Ostrzeżenie o dostępie sieciowym",
+  "header.torrent_activity": "Aktywność torrentów",
+  "header.torrent_tooltip": "Otwarte torrenty: %{count}",
   "header.web_access": "Dostęp WWW",
   "headless.network_warning": "UWAGA: Zdalny dostęp jest włączony. Aplikacja jest dostępna z sieci",
   "headless.network_warning_address": "Adres",

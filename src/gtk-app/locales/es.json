@@ -234,6 +234,8 @@
   "handless.network_warning": "ADVERTENCIA: El acceso remoto está activado. La aplicación es accesible desde la red",
   "handless.network_warning_address": "Dirección",
   "handless.network_warning_title": "Advertencia de acceso a la red",
+  "header.torrent_activity": "Actividad de torrents",
+  "header.torrent_tooltip": "Torrents abiertos: %{count}",
   "header.web_access": "Acceso web",
   "headless.network_warning": "ADVERTENCIA: El acceso remoto está activado. La aplicación es accesible desde la red",
   "headless.network_warning_address": "Dirección",

@@ -234,6 +234,8 @@
   "handless.network_warning": "УВАГА: Увімкнено віддалений доступ. Застосунок доступний з мережі",
   "handless.network_warning_address": "Адреса",
   "handless.network_warning_title": "Попередження про мережевий доступ",
+  "header.torrent_activity": "Активність торентів",
+  "header.torrent_tooltip": "Відкрито торентів: %{count}",
   "header.web_access": "Веб-доступ",
   "headless.network_warning": "УВАГА: Увімкнено віддалений доступ. Застосунок доступний з мережі",
   "headless.network_warning_address": "Адреса",

@@ -234,6 +234,8 @@
   "handless.network_warning": "УВАГА: Уключаны аддалены доступ. Прыкладанне даступна з сеткі",
   "handless.network_warning_address": "Адрас",
   "handless.network_warning_title": "Папярэджанне аб сеткавым доступе",
+  "header.torrent_activity": "Актыўнасць тарэнтаў",
+  "header.torrent_tooltip": "Адкрыта тарэнтаў: %{count}",
   "header.web_access": "Вэб-доступ",
   "headless.network_warning": "УВАГА: Уключаны аддалены доступ. Прыкладанне даступна з сеткі",
   "headless.network_warning_address": "Адрас",

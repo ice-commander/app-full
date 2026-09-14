@@ -305,6 +305,43 @@ pub(super) fn build_header_bar(
         None
     };
 
+    let torrent_btn = {
+        let btn = Button::builder()
+            .tooltip_text(&*crate::i18n::tr("header.torrent_activity"))
+            .build();
+        let btn_box = gtk::Box::builder()
+            .orientation(Orientation::Horizontal)
+            .spacing(6)
+            .build();
+        let icon = gtk::Image::from_resource("/com/icecommander/gtk/torrent.svg");
+        icon.set_pixel_size(20);
+        let label = Label::new(None);
+        btn_box.append(&icon);
+        btn_box.append(&label);
+        btn.set_child(Some(&btn_box));
+        btn.set_visible(false);
+        let btn_timer = btn.clone();
+        gtk::glib::timeout_add_local(std::time::Duration::from_secs(1), move || {
+            match virtualfs::torrent_session::activity() {
+                Some(a) => {
+                    label.set_text(&format!(
+                        "\u{2193} {}  \u{2191} {}",
+                        virtualfs::torrent_session::format_speed(a.download_mbps),
+                        virtualfs::torrent_session::format_speed(a.upload_mbps)
+                    ));
+                    btn_timer.set_tooltip_text(Some(&crate::i18n::trf(
+                        "header.torrent_tooltip",
+                        &[("count", &a.torrents.to_string())],
+                    )));
+                    btn_timer.set_visible(true);
+                }
+                None => btn_timer.set_visible(false),
+            }
+            gtk::glib::ControlFlow::Continue
+        });
+        btn
+    };
+
     #[cfg(not(target_os = "linux"))]
     header_bar.pack_start(&logo_img);
     header_bar.pack_start(&settings_btn);
@@ -315,6 +352,7 @@ pub(super) fn build_header_bar(
     if let Some(ref web_btn) = web_btn {
         header_bar.pack_end(web_btn);
     }
+    header_bar.pack_end(&torrent_btn);
 
     HeaderResult {
         bar: header_bar,

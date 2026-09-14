@@ -234,6 +234,8 @@
   "handless.network_warning": "FIGYELMEZTETÉS: A távoli hozzáférés engedélyezve van. Az alkalmazás elérhető a hálózatból",
   "handless.network_warning_address": "Cím",
   "handless.network_warning_title": "Hálózati hozzáférési figyelmeztetés",
+  "header.torrent_activity": "Torrent-aktivitás",
+  "header.torrent_tooltip": "Megnyitott torrentek: %{count}",
   "header.web_access": "Webes hozzáférés",
   "headless.network_warning": "FIGYELMEZTETÉS: A távoli hozzáférés engedélyezve van. Az alkalmazás elérhető a hálózatból",
   "headless.network_warning_address": "Cím",

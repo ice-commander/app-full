@@ -5,7 +5,6 @@ use virtualfs::torrent_rpc::{TorrentFileSystemRpc, TorrentView};
 #[derive(Clone)]
 pub struct TorrentToolbar {
     pub container: gtk::Box,
-    all_btn: gtk::ToggleButton,
     downloaded_btn: gtk::ToggleButton,
     peers_btn: gtk::ToggleButton,
     start_btn: gtk::Button,
@@ -34,7 +33,7 @@ impl TorrentToolbar {
             return;
         };
         self.container.set_visible(true);
-        let running = virtualfs::torrent_session::is_running(&path);
+        let running = virtualfs::torrent_session::is_active(&path);
         self.start_btn.set_sensitive(!running);
         self.stop_btn.set_sensitive(running);
         self.downloaded_btn.set_sensitive(running);
@@ -102,7 +101,9 @@ pub fn build(router: Rc<panel_router::PanelRouter>) -> TorrentToolbar {
                     Ok(b) => b,
                     Err(_) => return,
                 };
-                let _ = virtualfs::torrent_session::start(&path, bytes, None).await;
+                if let Err(e) = virtualfs::torrent_session::start(&path, bytes, None).await {
+                    ic_logging::warn!("torrent start: {e}");
+                }
                 router.refresh_spawned();
             });
         });
@@ -115,7 +116,9 @@ pub fn build(router: Rc<panel_router::PanelRouter>) -> TorrentToolbar {
             };
             let router = router.clone();
             gtk::glib::spawn_future_local(async move {
-                let _ = virtualfs::torrent_session::stop(&path).await;
+                if let Err(e) = virtualfs::torrent_session::stop(&path).await {
+                    ic_logging::warn!("torrent stop: {e}");
+                }
                 router.refresh_spawned();
             });
         });
@@ -150,11 +153,41 @@ pub fn build(router: Rc<panel_router::PanelRouter>) -> TorrentToolbar {
                 let router = router.clone();
                 d.close();
                 gtk::glib::spawn_future_local(async move {
-                    let _ = virtualfs::torrent_session::cleanup(&path, also_torrent).await;
+                    if let Err(e) =
+                        virtualfs::torrent_session::cleanup(&path, also_torrent).await
+                    {
+                        ic_logging::warn!("torrent cleanup: {e}");
+                    }
                     router.refresh_spawned();
                 });
             });
             dialog.present(Some(&window));
+        });
+    }
+
+    {
+        let router = router.clone();
+        let weak = container.downgrade();
+        let start = start_btn.clone();
+        let stop = stop_btn.clone();
+        let downloaded = downloaded_btn.clone();
+        let peers = peers_btn.clone();
+        gtk::glib::timeout_add_local(std::time::Duration::from_secs(1), move || {
+            let Some(container) = weak.upgrade() else {
+                return gtk::glib::ControlFlow::Break;
+            };
+            match torrent_path(&router) {
+                Some(path) => {
+                    let active = virtualfs::torrent_session::is_active(&path);
+                    container.set_visible(true);
+                    start.set_sensitive(!active);
+                    stop.set_sensitive(active);
+                    downloaded.set_sensitive(active);
+                    peers.set_sensitive(active);
+                }
+                None => container.set_visible(false),
+            }
+            gtk::glib::ControlFlow::Continue
         });
     }
 
@@ -169,7 +202,6 @@ pub fn build(router: Rc<panel_router::PanelRouter>) -> TorrentToolbar {
 
     TorrentToolbar {
         container,
-        all_btn,
         downloaded_btn,
         peers_btn,
         start_btn,

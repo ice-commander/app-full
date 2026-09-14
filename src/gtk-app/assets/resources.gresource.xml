@@ -47,6 +47,7 @@
     <file compressed="true" preprocess="xml-stripblanks">win-console.svg</file>
 
     <file>app-logo.svg</file>
+    <file>torrent.svg</file>
     <file>app-logo-128.png</file>
     <file>app-logo-512.png</file>
     <file>tiles.svg</file>

@@ -234,6 +234,8 @@
   "handless.network_warning": "ATENȚIE: Accesul de la distanță este activat. Aplicația este accesibilă din rețea",
   "handless.network_warning_address": "Adresă",
   "handless.network_warning_title": "Avertisment acces în rețea",
+  "header.torrent_activity": "Activitate torent",
+  "header.torrent_tooltip": "Torente deschise: %{count}",
   "header.web_access": "Acces web",
   "headless.network_warning": "ATENȚIE: Accesul de la distanță este activat. Aplicația este accesibilă din rețea",
   "headless.network_warning_address": "Adresă",

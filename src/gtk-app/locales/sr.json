@@ -234,6 +234,8 @@
   "handless.network_warning": "УПОЗОРЕЊЕ: Удаљени приступ је омогућен. Апликација је доступна из мреже",
   "handless.network_warning_address": "Адреса",
   "handless.network_warning_title": "Упозорење о мрежном приступу",
+  "header.torrent_activity": "Активност торента",
+  "header.torrent_tooltip": "Отворених торента: %{count}",
   "header.web_access": "Веб приступ",
   "headless.network_warning": "УПОЗОРЕЊЕ: Удаљени приступ је омогућен. Апликација је доступна из мреже",
   "headless.network_warning_address": "Адреса",

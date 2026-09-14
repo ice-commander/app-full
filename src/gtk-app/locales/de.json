@@ -234,6 +234,8 @@
   "handless.network_warning": "WARNUNG: Fernzugriff ist aktiviert. Die Anwendung ist aus dem Netzwerk erreichbar",
   "handless.network_warning_address": "Adresse",
   "handless.network_warning_title": "Warnung: Netzwerkzugriff",
+  "header.torrent_activity": "Torrent-Aktivität",
+  "header.torrent_tooltip": "Offene Torrents: %{count}",
   "header.web_access": "Web-Zugriff",
   "headless.network_warning": "WARNUNG: Fernzugriff ist aktiviert. Die Anwendung ist aus dem Netzwerk erreichbar",
   "headless.network_warning_address": "Adresse",

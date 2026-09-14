@@ -234,6 +234,8 @@
   "handless.network_warning": "ВНИМАНИЕ: Отдалеченият достъп е активиран. Приложението е достъпно от мрежата",
   "handless.network_warning_address": "Адрес",
   "handless.network_warning_title": "Предупреждение за мрежов достъп",
+  "header.torrent_activity": "Торент активност",
+  "header.torrent_tooltip": "Отворени торенти: %{count}",
   "header.web_access": "Уеб достъп",
   "headless.network_warning": "ВНИМАНИЕ: Отдалеченият достъп е активиран. Приложението е достъпно от мрежата",
   "headless.network_warning_address": "Адрес",

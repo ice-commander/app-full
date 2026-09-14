@@ -33,6 +33,7 @@ pub struct TorrentFileSystemRpc {
 
 impl TorrentFileSystemRpc {
     pub fn new(relative_path_in_parent: String, parent_rpc: Rc<dyn FileSystemRpc>) -> Self {
+        crate::torrent_session::acquire(&relative_path_in_parent);
         Self {
             relative_path_in_parent,
             parent_rpc,
@@ -63,6 +64,12 @@ pub fn status_text(done_bytes: u64, total_bytes: u64) -> String {
     }
     let percent = (done_bytes as f64 / total_bytes as f64 * 100.0).floor() as u64;
     format!("{}%", percent.min(99))
+}
+
+impl Drop for TorrentFileSystemRpc {
+    fn drop(&mut self) {
+        crate::torrent_session::release(&self.relative_path_in_parent);
+    }
 }
 
 pub fn downloaded_rows(

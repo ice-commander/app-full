@@ -234,6 +234,8 @@
   "handless.network_warning": "UPOZORNĚNÍ: Vzdálený přístup je povolen. Aplikace je přístupná ze sítě",
   "handless.network_warning_address": "Adresa",
   "handless.network_warning_title": "Upozornění na síťový přístup",
+  "header.torrent_activity": "Aktivita torrentů",
+  "header.torrent_tooltip": "Otevřené torrenty: %{count}",
   "header.web_access": "Webový přístup",
   "headless.network_warning": "UPOZORNĚNÍ: Vzdálený přístup je povolen. Aplikace je přístupná ze sítě",
   "headless.network_warning_address": "Adresa",

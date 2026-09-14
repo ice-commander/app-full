@@ -531,6 +531,9 @@ impl MainWindow {
             let config_close = config.clone();
 
             window.connect_close_request(move |win| {
+                virtualfs::torrent_session::shutdown_blocking(
+                    std::time::Duration::from_secs(3),
+                );
                 let (w, h) = win.default_size();
                 let is_max = win.is_maximized();
                 config_close.set("ui.window_width", w);
